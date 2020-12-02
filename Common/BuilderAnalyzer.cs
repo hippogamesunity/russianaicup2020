@@ -6,7 +6,7 @@ namespace aicup2020.Common
 {
     public static class BuilderAnalyzer
     {
-        public static Dictionary<int, int> Statistics;
+        public static Dictionary<int, int> Statistics = new Dictionary<int, int>();
         public static bool[,] ResourceMap;
         public const int PeriodTicks = 100;
 
@@ -30,26 +30,29 @@ namespace aicup2020.Common
                 ResourceMap[resource.Position.X, resource.Position.Y] = true;
             }
 
-            foreach (var builder in PlayerView.Instance.Entities.Where(i => i.EntityType == EntityType.BuilderBase))
+            foreach (var builder in PlayerView.Instance.Entities.Where(i => i.EntityType == EntityType.BuilderUnit && i.PlayerId == PlayerView.Instance.MyId))
             {
-                if (!Statistics.ContainsKey(builder.Id)) Statistics.Add(builder.Id, 0);
+                if (!Statistics.ContainsKey(builder.Id)) Statistics.Add(builder.Id, PeriodTicks);
 
-                foreach (var position in new[] { new Vec2Int(builder.Position.X - 1, builder.Position.Y), new Vec2Int(builder.Position.X + 1, builder.Position.Y), new Vec2Int(builder.Position.X, builder.Position.Y - 1), new Vec2Int(builder.Position.X, builder.Position.Y + 1) })
+                var nearPositions = new[]
                 {
-                    if (!position.IsInsideMap()) continue;
+                    new Vec2Int(builder.Position.X - 1, builder.Position.Y),
+                    new Vec2Int(builder.Position.X + 1, builder.Position.Y),
+                    new Vec2Int(builder.Position.X, builder.Position.Y - 1),
+                    new Vec2Int(builder.Position.X, builder.Position.Y + 1)
+                };
 
-                    if (ResourceMap[position.X, position.Y])
-                    {
-                        Statistics[builder.Id]++;
+                if (nearPositions.Any(p => p.IsInsideMap() && ResourceMap[p.X, p.Y]))
+                {
+                    Statistics[builder.Id]++;
 
-                        if (Statistics[builder.Id] > PeriodTicks) Statistics[builder.Id] = PeriodTicks;
-                    }
-                    else
-                    {
-                        Statistics[builder.Id]--;
+                    if (Statistics[builder.Id] > PeriodTicks) Statistics[builder.Id] = PeriodTicks;
+                }
+                else
+                {
+                    Statistics[builder.Id]--;
 
-                        if (Statistics[builder.Id] < 0) Statistics[builder.Id] = 0;
-                    }
+                    if (Statistics[builder.Id] < 0) Statistics[builder.Id] = 0;
                 }
             }
         }
