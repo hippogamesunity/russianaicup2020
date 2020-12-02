@@ -1,4 +1,5 @@
 ﻿using System;
+using Aicup2020.Model;
 
 namespace aicup2020.Common
 {
@@ -16,6 +17,17 @@ namespace aicup2020.Common
         {
             X = x;
             Y = y;
+        }
+
+        public Position(Vec2Int position)
+        {
+            X = position.X;
+            Y = position.Y;
+        }
+
+        public Vec2Int ToVec2Int()
+        {
+            return new Vec2Int(X, Y);
         }
 
         public bool Equals(Position other)

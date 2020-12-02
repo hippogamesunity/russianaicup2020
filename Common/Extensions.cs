@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Aicup2020.Model;
 
 namespace aicup2020.Common
@@ -10,7 +11,12 @@ namespace aicup2020.Common
             return Distance(from.Position, PlayerView.Instance.EntityProperties[from.EntityType].Size, to.Position, PlayerView.Instance.EntityProperties[from.EntityType].Size);
         }
 
-        private static double Distance(Vec2Int a, int aSize, Vec2Int b, int bSize)
+        public static List<Vec2Int> RouteTo(this Entity from, Entity to)
+        {
+            return PathFinder.FindRouteByWavePath(from, to);
+        }
+
+        public static double Distance(Vec2Int a, int aSize, Vec2Int b, int bSize)
         {
             return Math.Sqrt(Math.Pow(a.X + aSize / 2d - b.X - bSize / 2d, 2) + Math.Pow(a.Y + aSize / 2d - b.Y - bSize / 2d, 2));
         }

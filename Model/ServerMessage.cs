@@ -1,3 +1,5 @@
+using System;
+
 namespace Aicup2020.Model
 {
     public abstract class ServerMessage
@@ -5,16 +7,24 @@ namespace Aicup2020.Model
         public abstract void WriteTo(System.IO.BinaryWriter writer);
         public static ServerMessage ReadFrom(System.IO.BinaryReader reader)
         {
-            switch (reader.ReadInt32())
+            try
             {
-                case GetAction.TAG:
-                    return GetAction.ReadFrom(reader);
-                case Finish.TAG:
-                    return Finish.ReadFrom(reader);
-                case DebugUpdate.TAG:
-                    return DebugUpdate.ReadFrom(reader);
-                default:
-                    throw new System.Exception("Unexpected tag value");
+                switch (reader.ReadInt32())
+                {
+                    case GetAction.TAG:
+                        return GetAction.ReadFrom(reader);
+                    case Finish.TAG:
+                        return Finish.ReadFrom(reader);
+                    case DebugUpdate.TAG:
+                        return DebugUpdate.ReadFrom(reader);
+                    default:
+                        throw new System.Exception("Unexpected tag value");
+                }
+            }
+            catch (Exception e)
+            {
+                Environment.Exit(1);
+                throw;
             }
         }
 

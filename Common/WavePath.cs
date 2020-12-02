@@ -18,7 +18,7 @@ namespace aicup2020.Common
 
         public static List<Position> FindRoute(bool[,] graph, Position from, List<Position> to, bool diagonal)
         {
-            if (to.Any(i => !graph[i.X, i.Y])) return null;
+            //if (to.Any(i => !graph[i.X, i.Y])) return null;
             if (to.Any(i => i == from)) return new List<Position>();
 
             InitializeGraph(graph, diagonal);
