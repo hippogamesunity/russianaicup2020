@@ -11,7 +11,8 @@ namespace Aicup2020
         public Action GetAction(PlayerView playerView, DebugInterface debugInterface)
         {
             PlayerView.Instance = playerView;
-            PathFinder.Initialize();
+            PathFinder.Refresh();
+            BuilderAnalyzer.Refresh();
 
             var actions = new Dictionary<int, EntityAction>();
 

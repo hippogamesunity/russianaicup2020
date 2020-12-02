@@ -20,5 +20,10 @@ namespace aicup2020.Common
         {
             return Math.Sqrt(Math.Pow(a.X + aSize / 2d - b.X - bSize / 2d, 2) + Math.Pow(a.Y + aSize / 2d - b.Y - bSize / 2d, 2));
         }
+
+        public static bool IsInsideMap(this Vec2Int position)
+        {
+            return position.X >= 0 && position.X < PlayerView.Instance.MapSize && position.Y >= 0 && position.Y < PlayerView.Instance.MapSize;
+        }
     }
 }

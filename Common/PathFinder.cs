@@ -8,7 +8,7 @@ namespace aicup2020.Common
     {
         private static bool[,] _graph;
 
-        public static void Initialize()
+        public static void Refresh()
         {
             if (_graph == null)
             {
