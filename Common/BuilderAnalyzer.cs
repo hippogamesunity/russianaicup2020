@@ -7,15 +7,27 @@ namespace aicup2020.Common
     public static class BuilderAnalyzer
     {
         public static Dictionary<int, int> Statistics;
+        public static bool[,] ResourceMap;
         public const int PeriodTicks = 100;
 
         public static void Refresh()
         {
-            var resourceMap = new bool[PlayerView.Instance.MapSize, PlayerView.Instance.MapSize];
+            if (ResourceMap == null)
+            {
+                ResourceMap = new bool[PlayerView.Instance.MapSize, PlayerView.Instance.MapSize];
+            }
+
+            for (var x = 0; x < PlayerView.Instance.MapSize; x++)
+            {
+                for (var y = 0; y < PlayerView.Instance.MapSize; y++)
+                {
+                    ResourceMap[x, y] = false;
+                }
+            }
 
             foreach (var resource in PlayerView.Instance.Entities.Where(i => i.EntityType == EntityType.Resource))
             {
-                resourceMap[resource.Position.X, resource.Position.Y] = true;
+                ResourceMap[resource.Position.X, resource.Position.Y] = true;
             }
 
             foreach (var builder in PlayerView.Instance.Entities.Where(i => i.EntityType == EntityType.BuilderBase))
@@ -26,7 +38,7 @@ namespace aicup2020.Common
                 {
                     if (!position.IsInsideMap()) continue;
 
-                    if (resourceMap[position.X, position.Y])
+                    if (ResourceMap[position.X, position.Y])
                     {
                         Statistics[builder.Id]++;
 
